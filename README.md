@@ -1,5 +1,11 @@
 # HTT4J
 
+### Fork
+
+(Almost) all the code is from the original project [here](https://github.com/incendo/http4j).
+
+All credits go to the original contributors.
+
 ## Description
 
 This is a simple, lightweight and tiny wrapper for Java's HttpURLConnection. It has no external
@@ -21,33 +27,35 @@ size of the output artifacts.
 
 Releases are published to the central repository, snapshots are published to S01 OSS Sonatype.
 
-```
+```kotlin
 repositories {
     mavenCentral()
+    maven("https://repo.deltapvp.net/")
 }
 
 dependencies {
-    compileOnly("com.intellectualsites.http:HTTP4J:1.3")
+    compileOnly("net.deltapvp:http4j:1.5.0-SNAPSHOT")
 }
 ```
 
 ```xml
 <dependency>
-    <groupId>com.intellectualsites.http</groupId>
-    <artifactId>HTTP4J</artifactId>
-    <version>1.3</version>
+    <groupId>net.deltapvp</groupId>
+    <artifactId>http4j</artifactId>
+    <version>1.5.0-SNAPSHOT</version>
 </dependency>
 ```
 
 ### Code
 
-**JavaDocs:** [https://javadoc.io/doc/com.intellectualsites.http4j/HTTP4J](https://javadoc.io/doc/com.intellectualsites.http4j/HTTP4J)
+**JavaDocs:** [https://javadoc.io/doc/net.deltapvp/http4j](https://javadoc.io/doc/net.deltapvp/http4j)
 
 All requests are done using an instance of `com.intellectualsites.http.HttpClient`:
 
 ```java
 HttpClient client = HttpClient.newBuilder()
     .withBaseURL("https://your.api.com")
+    .withEntityMapper(EntityMapper.newInstance())
     .build();
 ```
 
