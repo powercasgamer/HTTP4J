@@ -2,7 +2,7 @@
 
 ### Fork
 
-(Almost) all the code is from the original project [here](https://github.com/incendo/http4j).
+(Almost) all the code is from the original project [here](https://github.com/IntellectualSites/HTTP4J).
 
 All credits go to the original contributors.
 
@@ -106,7 +106,7 @@ By using `onException(exception -> {})` you are able to modify the behaviour.
 
 #### Examples
 
-More examples can be found in [HttpClientTest.java](https://github.com/Incendo/HTTP4J/blob/master/src/test/java/com/intellectualsites/http/HttpClientTest.java)
+More examples can be found in [HttpClientTest.java](https://github.com/IntellectualSites/HTTP4J/blob/master/src/test/java/com/intellectualsites/http/HttpClientTest.java)
 
 ## Projects using HTTP4J:
 
