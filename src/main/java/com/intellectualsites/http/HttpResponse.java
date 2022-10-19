@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,8 @@
  */
 package com.intellectualsites.http;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A HTTP response
@@ -42,7 +41,7 @@ public final class HttpResponse {
                          @NotNull final String status,
                          @NotNull final Headers headers,
                          @NotNull final EntityMapper entityMapper,
-                         @NotNull final byte[] body) {
+                         final byte @NotNull [] body) {
         this.status = status;
         this.code = code;
         this.headers = headers;
@@ -82,7 +81,7 @@ public final class HttpResponse {
      *
      * @return Response body
      */
-    @NotNull public byte[] getRawResponse() {
+    public byte @NotNull [] getRawResponse() {
         return this.body;
     }
 
@@ -99,7 +98,7 @@ public final class HttpResponse {
      * Get the response entity and map it to a specific type
      *
      * @param returnType Return type class
-     * @param <T> Return type
+     * @param <T>        Return type
      * @return Response
      * @throws IllegalArgumentException If no mapper exists for the type
      */
@@ -113,9 +112,9 @@ public final class HttpResponse {
         }
 
         return this.entityMapper.getDeserializer(returnType).map(deserializer ->
-            deserializer.deserialize(contentType, this.getRawResponse()))
-            .orElseThrow(() -> new IllegalStateException(String.format("Could not deserialize response into type '%s'",
-                returnType.getCanonicalName())));
+                        deserializer.deserialize(contentType, this.getRawResponse()))
+                .orElseThrow(() -> new IllegalStateException(String.format("Could not deserialize response into type '%s'",
+                        returnType.getCanonicalName())));
     }
 
 
@@ -142,7 +141,7 @@ public final class HttpResponse {
 
         @NotNull Builder withHeader(@NotNull final String key, @NotNull final String value) {
             this.headers.addHeader(Objects.requireNonNull(key, "Key may not be null"),
-                Objects.requireNonNull(value, "Value may not be null"));
+                    Objects.requireNonNull(value, "Value may not be null"));
             return this;
         }
 
@@ -151,14 +150,14 @@ public final class HttpResponse {
             return this;
         }
 
-        @NotNull Builder withBody(@NotNull final byte[] bytes) {
+        @NotNull Builder withBody(final byte @NotNull [] bytes) {
             this.bytes = Objects.requireNonNull(bytes, "Bytes may not be null");
             return this;
         }
 
         @NotNull HttpResponse build() {
             return new HttpResponse(this.status, this.statusMessage,
-                this.headers, this.entityMapper, this.bytes);
+                    this.headers, this.entityMapper, this.bytes);
         }
 
     }

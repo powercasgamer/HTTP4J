@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,14 @@
  */
 package com.intellectualsites.http;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Utility responsible for serializing and de-serializing HTTP entities
@@ -41,7 +40,8 @@ public final class EntityMapper {
     private final Map<Class<?>, EntitySerializer<?>> serializers = new HashMap<>();
     private final Map<Class<?>, EntityDeserializer<?>> deserializers = new HashMap<>();
 
-    @SuppressWarnings("ALL") private static <T> T castUnsafe(@NotNull final Object o) {
+    @SuppressWarnings ("ALL")
+    private static <T> T castUnsafe(@NotNull final Object o) {
         return (T) o;
     }
 
@@ -66,7 +66,7 @@ public final class EntityMapper {
      * @return Mapper instance
      */
     @NotNull public <T> EntityMapper registerSerializer(@NotNull final Class<T> clazz,
-        @NotNull final EntitySerializer<T> serializer) {
+                                               @NotNull final EntitySerializer<T> serializer) {
         Objects.requireNonNull(clazz, "Class may not be null");
         Objects.requireNonNull(serializer, "Serializer may not be null");
         this.serializers.put(clazz, serializer);
@@ -82,7 +82,7 @@ public final class EntityMapper {
      * @return Mapper instance
      */
     @NotNull public <T> EntityMapper registerDeserializer(@NotNull final Class<T> clazz,
-        @NotNull final EntityDeserializer<T> deserializer) {
+                                                 @NotNull final EntityDeserializer<T> deserializer) {
         Objects.requireNonNull(clazz, "Type may not be null");
         Objects.requireNonNull(deserializer, "Deserializer may not be null");
         this.deserializers.put(clazz, deserializer);
@@ -134,7 +134,7 @@ public final class EntityMapper {
          * @param input Input that should be serialized
          * @return The serialized object
          */
-        @NotNull byte[] serialize(@NotNull final T input);
+        byte @NotNull [] serialize(@NotNull final T input);
 
         /**
          * Get the content type of the object
@@ -162,20 +162,21 @@ public final class EntityMapper {
          * @return De-serialized input
          */
         @NotNull T deserialize(@Nullable final ContentType contentType,
-            @NotNull final byte[] input);
+                               final byte @NotNull [] input);
 
     }
 
 
     private static final class StringDeserializer implements EntityDeserializer<String> {
 
-        @NotNull @Override public String deserialize(@Nullable final ContentType contentType,
-            @NotNull final byte[] input) {
+        @NotNull @Override
+        public String deserialize(@Nullable final ContentType contentType,
+                                  final byte @NotNull [] input) {
             final Charset charset;
             if (contentType != null && contentType.toString().toLowerCase().contains("utf-8")) {
                 charset = StandardCharsets.UTF_8;
             } else if (contentType != null && contentType.toString().toLowerCase()
-                .contains("utf-16")) {
+                    .contains("utf-16")) {
                 charset = StandardCharsets.UTF_16;
             } else {
                 charset = StandardCharsets.US_ASCII;
@@ -188,11 +189,13 @@ public final class EntityMapper {
 
     private static final class StringSerializer implements EntitySerializer<String> {
 
-        @NotNull @Override public byte[] serialize(@NotNull final String string) {
+        @Override
+        public byte @NotNull [] serialize(@NotNull final String string) {
             return string.getBytes(StandardCharsets.UTF_8);
         }
 
-        @Override public ContentType getContentType() {
+        @Override
+        public ContentType getContentType() {
             return ContentType.STRING_UTF8;
         }
 

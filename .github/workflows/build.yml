@@ -1,46 +1,60 @@
 name: "build"
 
-on: ["pull_request", "push"]
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]
+  pull_request:
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
+  cancel-in-progress: true
+env:
+  PROJECT_NAME: Helium
+  
 jobs:
   build:
-    runs-on: "ubuntu-latest"
+    # Only run on PRs if the source branch is on someone else's repo
+    if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
+    strategy:
+      matrix:
+        java: ["17"]
+        os: ["ubuntu-latest"]
+    runs-on: "${{ matrix.os }}"
     steps:
-      - name: "Checkout Repository"
-        uses: "actions/checkout@v2.3.4"
-      - name : "Validate Gradle Wrapper"
-        uses : "gradle/wrapper-validation-action@v1.0.4"
-      - name: "Setup Java"
-        uses: "actions/setup-java@v2.3.1"
+      - name: "checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "validate gradle wrapper"
+        uses: "gradle/wrapper-validation-action@v1"
+
+      - name: "Setup JDK ${{ matrix.java }}"
+        uses: actions/setup-java@v3
         with:
           distribution: "temurin"
-          java-version: "17"
-      - name: "Clean Build"
-        run: "./gradlew clean build"
-      - name : "Archive Artifacts"
-        uses : "actions/upload-artifact@v2.2.4"
-        with :
-          name : "HTTP4J-SNAPSHOT"
-          path : "build/libs/*.jar"
-      - name: "Determine release status"
-        if: "${{ runner.os == 'Linux' }}"
+          java-version: "${{ matrix.java }}"
+          cache: "gradle"
+
+      # Actually build
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.gradle/jdks
+          key: "${{ runner.os }}-deltapvp-${{ hashFiles('**/*.gradle*') }}"
+          restore-keys: |
+            ${{ runner.os }}-deltapvp-
+
+      - name: "run gradle build"
+        uses: "gradle/gradle-build-action@v2"
+        with:
+          cache-read-only: "${{ !startsWith(github.ref, 'refs/heads/master/') || github.event_name == 'pull_request' }}"
+          arguments: "build"
+
+      - name: Cleanup Gradle Cache
+      # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
+      # Restoring these files from a GitHub Actions cache might cause problems for future builds.
         run: |
-          if [ "$(./gradlew properties | awk '/^version:/ { print $2; }' | grep '\-SNAPSHOT')" ]; then
-            echo "STATUS=snapshot" >> $GITHUB_ENV
-          else
-            echo "STATUS=release" >> $GITHUB_ENV
-          fi
-      - name: "Publish Release"
-        if: "${{ runner.os == 'Linux' && env.STATUS == 'release' && github.event_name == 'push' && github.ref == 'refs/heads/main'}}"
-        run: "./gradlew publishToSonatype closeSonatypeStagingRepository"
-        env :
-          ORG_GRADLE_PROJECT_sonatypeUsername : "${{ secrets.SONATYPE_USERNAME }}"
-          ORG_GRADLE_PROJECT_sonatypePassword : "${{ secrets.SONATYPE_PASSWORD }}"
-          ORG_GRADLE_PROJECT_signingKey : "${{ secrets.SIGNING_KEY }}"
-          ORG_GRADLE_PROJECT_signingPassword : "${{ secrets.SIGNING_PASSWORD }}"
-      - name : "Publish Snapshot"
-        if : "${{ runner.os == 'Linux' && env.STATUS != 'release' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}"
-        run : "./gradlew publishToSonatype"
-        env :
-          ORG_GRADLE_PROJECT_sonatypeUsername : "${{ secrets.SONATYPE_USERNAME }}"
-          ORG_GRADLE_PROJECT_sonatypePassword : "${{ secrets.SONATYPE_PASSWORD }}"
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties

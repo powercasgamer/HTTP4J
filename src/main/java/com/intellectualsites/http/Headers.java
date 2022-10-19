@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,9 @@
  */
 package com.intellectualsites.http;
 
+import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Container for HTTP headers

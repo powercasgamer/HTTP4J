@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,6 @@
  */
 package com.intellectualsites.http;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -38,6 +35,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * HTTP request class. This should not be interacted with directly,
@@ -55,8 +54,8 @@ final class HttpRequest {
     @NotNull private final Consumer<Throwable> throwableConsumer;
 
     private HttpRequest(@NotNull final HttpMethod method, @NotNull final URL url, @NotNull final Headers headers,
-        @Nullable Supplier<Object> inputSupplier, @NotNull final EntityMapper mapper,
-        @NotNull final Consumer<Throwable> throwableConsumer) {
+                        @Nullable Supplier<Object> inputSupplier, @NotNull final EntityMapper mapper,
+                        @NotNull final Consumer<Throwable> throwableConsumer) {
         this.method = method;
         this.url = url;
         this.headers = headers;
@@ -103,16 +102,16 @@ final class HttpRequest {
                 final Object object = this.inputSupplier.get();
                 if (object != null) {
                     final EntityMapper.EntitySerializer serializer =
-                        this.mapper.getSerializer(object.getClass()).orElseThrow(() -> new IllegalArgumentException(String
-                            .format("There is no registered serializer for type '%s'",
-                                object.getClass().getCanonicalName())));
+                            this.mapper.getSerializer(object.getClass()).orElseThrow(() -> new IllegalArgumentException(String
+                                    .format("There is no registered serializer for type '%s'",
+                                            object.getClass().getCanonicalName())));
                     if (this.headers.getHeader("Content-Type").isEmpty()) {
                         httpURLConnection.setRequestProperty("Content-Type", serializer.getContentType().toString());
                     }
                     final byte[] bytes = serializer.serialize(object);
                     httpURLConnection.setRequestProperty("Content-Length", Integer.toString(bytes.length));
                     try (final DataOutputStream dataOutputStream = new DataOutputStream(
-                        httpURLConnection.getOutputStream())) {
+                            httpURLConnection.getOutputStream())) {
                         dataOutputStream.write(bytes);
                         dataOutputStream.flush();
                     }
@@ -132,9 +131,9 @@ final class HttpRequest {
             }
 
             final HttpResponse.Builder builder = HttpResponse.builder()
-                .withStatus(httpURLConnection.getResponseCode())
-                .withStatusMessage(httpURLConnection.getResponseMessage())
-                .withEntityMapper(this.mapper);
+                    .withStatus(httpURLConnection.getResponseCode())
+                    .withStatusMessage(httpURLConnection.getResponseMessage())
+                    .withEntityMapper(this.mapper);
             for (final Map.Entry<String, List<String>> entry : httpURLConnection.getHeaderFields().entrySet()) {
                 if (entry.getKey() == null) {
                     continue;
@@ -214,7 +213,7 @@ final class HttpRequest {
         /**
          * Add a header to the request
          *
-         * @param key Header key
+         * @param key   Header key
          * @param value Header value
          * @return Builder instance
          */
@@ -251,9 +250,9 @@ final class HttpRequest {
             Objects.requireNonNull(this.mapper, "No mapper was supplied");
             Objects.requireNonNull(this.throwableConsumer, "No throwable consumer was supplied");
             return new HttpRequest(this.method, this.url, this.headers,
-                this.inputSupplier, this.mapper, this.throwableConsumer);
+                    this.inputSupplier, this.mapper, this.throwableConsumer);
         }
 
     }
-    
+
 }

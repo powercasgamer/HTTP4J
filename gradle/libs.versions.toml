@@ -1,0 +1,14 @@
+[versions]
+indra = "3.0.1"
+annotations = "23.0.0"
+gson = "2.9.1"
+titan = "1.0.48-SNAPSHOT"
+
+[libraries]
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+[plugins]
+indra = { id = "net.kyori.indra", version.ref = "indra" }
+indra-publishing = { id = "net.kyori.indra.publishing", version.ref = "indra" }
+titan = { id = "net.deltapvp.titan", version.ref = "titan" }

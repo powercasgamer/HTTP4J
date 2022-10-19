@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,11 @@
  */
 package com.intellectualsites.http;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Wrapper for Content-Type header values
@@ -39,6 +38,7 @@ public final class ContentType {
 
     public static final ContentType JSON = of("application/json; charset=UTF-8");
     public static final ContentType XML = of("application/xml");
+    public static final ContentType TEXT = of("text/plain");
     public static final ContentType DUMMY = of("application/*");
     public static final ContentType STRING_UTF8 = of("text/html; charset=UTF-8");
 
@@ -56,18 +56,21 @@ public final class ContentType {
      */
     @NotNull public static ContentType of(@NotNull final String type) {
         return internalMap.computeIfAbsent(Objects.requireNonNull(type,
-            "Type may not be null").toLowerCase(), ContentType::new);
+                "Type may not be null").toLowerCase(), ContentType::new);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return this.type;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return this.type.hashCode();
     }
 
-    @Override public boolean equals(@Nullable final Object o) {
+    @Override
+    public boolean equals(@Nullable final Object o) {
         if (this == o) {
             return true;
         }

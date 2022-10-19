@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,10 @@ package com.intellectualsites.http.external;
 import com.google.gson.Gson;
 import com.intellectualsites.http.ContentType;
 import com.intellectualsites.http.EntityMapper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Class containing {@link EntityMapper mappers} for {@link Gson} objects
@@ -46,7 +45,7 @@ public final class GsonMapper {
      * @return Serializer for the input type
      */
     @NotNull public static <T> GsonSerializer<T> serializer(@NotNull final Class<T> clazz,
-        @NotNull final Gson gson) {
+                                                   @NotNull final Gson gson) {
         return new GsonSerializer<>(clazz, gson);
     }
 
@@ -59,7 +58,7 @@ public final class GsonMapper {
      * @return Deserializer for the output type
      */
     @NotNull public static <T> GsonDeserializer<T> deserializer(@NotNull final Class<T> clazz,
-        @NotNull final Gson gson) {
+                                                       @NotNull final Gson gson) {
         return new GsonDeserializer<>(clazz, gson);
     }
 
@@ -74,11 +73,13 @@ public final class GsonMapper {
             this.gson = gson;
         }
 
-        @Override @NotNull public byte[] serialize(@NotNull final T input) {
+        @Override
+        public byte @NotNull [] serialize(@NotNull final T input) {
             return this.gson.toJson(input).getBytes(StandardCharsets.UTF_8);
         }
 
-        @Override public ContentType getContentType() {
+        @Override
+        public ContentType getContentType() {
             return ContentType.JSON;
         }
 
@@ -95,13 +96,13 @@ public final class GsonMapper {
             this.gson = gson;
         }
 
-        @NotNull @Override
-        public T deserialize(@Nullable final ContentType contentType, @NotNull final byte[] input) {
+        @Override
+        @NotNull public T deserialize(@Nullable final ContentType contentType, final byte @NotNull [] input) {
             final Charset charset;
             if (contentType != null && contentType.toString().toLowerCase().contains("utf-8")) {
                 charset = StandardCharsets.UTF_8;
             } else if (contentType != null && contentType.toString().toLowerCase()
-                .contains("utf-16")) {
+                    .contains("utf-16")) {
                 charset = StandardCharsets.UTF_16;
             } else {
                 charset = StandardCharsets.US_ASCII;

@@ -21,60 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.intellectualsites.http;
+package com.intellectualsites.http.util;
 
 /**
- * HTTP methods
+ * @author powercas_gamer
+ * @since 1.5.0-SNAPSHOT
  */
-enum HttpMethod {
+public class StringUtil {
 
-    /**
-     * Post requests are used to handle data
-     */
-    POST,
-
-    /**
-     * Get requests are handled for getting resources
-     */
-    GET,
-
-    /**
-     * Add data to an external source
-     */
-    PUT,
-
-    /**
-     * Patch content on an external source
-     */
-    PATCH,
-
-    /**
-     * Retrieve the headers for a request
-     */
-    HEAD(false),
-
-    /**
-     * Delete content from an external source
-     */
-    DELETE;
-
-    private final boolean hasBody;
-
-    HttpMethod() {
-        this(true);
+    public static boolean isEmpty(String string) {
+        if (string == null) return true;
+        String trimmed = string.trim();
+        if (trimmed.isEmpty()) return true;
+        else if (trimmed.equalsIgnoreCase("")) return true;
+        else if (trimmed.equalsIgnoreCase(" ")) return true;
+        else return trimmed.equalsIgnoreCase("null");
     }
-
-    HttpMethod(final boolean hasBody) {
-        this.hasBody = hasBody;
-    }
-
-    /**
-     * Whether the method should return an entity
-     *
-     * @return Whether a response entity should be expected
-     */
-    boolean hasBody() {
-        return this.hasBody;
-    }
-
 }

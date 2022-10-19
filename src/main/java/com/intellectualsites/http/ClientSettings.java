@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,13 @@
  */
 package com.intellectualsites.http;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Settings that change the behaviour of {@link HttpClient}
@@ -42,7 +41,7 @@ final class ClientSettings {
     private EntityMapper entityMapper;
 
     ClientSettings() {
-        this.baseURL = "";
+        this.baseURL = null;
     }
 
     /**
@@ -51,8 +50,18 @@ final class ClientSettings {
      *
      * @return Base URL
      */
-    @NotNull String getBaseURL() {
+    @Nullable String getBaseURL() {
         return this.baseURL;
+    }
+
+    /**
+     * Set the base URL, that is prepended to
+     * the URL of each request
+     *
+     * @param baseURL base URL
+     */
+    void setBaseURL(@Nullable final String baseURL) {
+        this.baseURL = baseURL;
     }
 
     /**
@@ -66,25 +75,6 @@ final class ClientSettings {
     }
 
     /**
-     * Get all registered request decorators
-     *
-     * @return Unmodifiable collection of decorators
-     */
-    @NotNull Collection<Consumer<HttpClient.WrappedRequestBuilder>> getRequestDecorators() {
-        return Collections.unmodifiableCollection(this.decorators);
-    }
-
-    /**
-     * Set the base URL, that is prepended to
-     * the URL of each request
-     *
-     * @param baseURL base URL
-     */
-    void setBaseURL(@NotNull final String baseURL) {
-        this.baseURL = Objects.requireNonNull(baseURL, "Base URL may not be null");
-    }
-
-    /**
      * Set the default entity mapper that is used
      * by all requests, unless otherwise specified
      *
@@ -92,6 +82,15 @@ final class ClientSettings {
      */
     void setEntityMapper(@Nullable final EntityMapper entityMapper) {
         this.entityMapper = entityMapper;
+    }
+
+    /**
+     * Get all registered request decorators
+     *
+     * @return Unmodifiable collection of decorators
+     */
+    @NotNull Collection<Consumer<HttpClient.WrappedRequestBuilder>> getRequestDecorators() {
+        return Collections.unmodifiableCollection(this.decorators);
     }
 
     /**

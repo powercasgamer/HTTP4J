@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) {year} IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,16 @@
  */
 package com.intellectualsites.http;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A simple Java HTTP client
@@ -223,7 +223,9 @@ public final class HttpClient {
                     url = url.substring(1);
                 }
             }
-            url = HttpClient.this.settings.getBaseURL() + '/' + url;
+            if (Optional.ofNullable(HttpClient.this.settings.getBaseURL()).isPresent()) {
+                url = HttpClient.this.settings.getBaseURL() + '/' + url;
+            }
             try {
                 final URL javaURL = new URL(url);
                 builder.withURL(javaURL);
@@ -231,7 +233,9 @@ public final class HttpClient {
                 throw new RuntimeException(e);
             }
             builder.withMethod(method);
-            if (settings.getEntityMapper() != null) {
+            /*if (HttpClient.this.mapper != null) {
+                builder.withMapper(HttpClient.this.mapper);
+            } else */if (settings.getEntityMapper() != null) {
                 builder.withMapper(settings.getEntityMapper());
             }
         }
@@ -268,7 +272,7 @@ public final class HttpClient {
          * @return Builder instance
          */
         @NotNull public WrappedRequestBuilder withHeader(@NotNull final String key,
-            @NotNull final String value) {
+                                                @NotNull final String value) {
             builder.withHeader(key, value);
             return this;
         }
@@ -281,7 +285,7 @@ public final class HttpClient {
          * @return Builder instance
          */
         @NotNull public WrappedRequestBuilder onStatus(final int code,
-            @NotNull final Consumer<HttpResponse> responseConsumer) {
+                                              @NotNull final Consumer<HttpResponse> responseConsumer) {
             consumers.put(code, responseConsumer);
             return this;
         }
@@ -293,7 +297,7 @@ public final class HttpClient {
          * @return Builder instance
          */
         @NotNull public WrappedRequestBuilder onRemaining(
-            @NotNull final Consumer<HttpResponse> responseConsumer) {
+                @NotNull final Consumer<HttpResponse> responseConsumer) {
             this.other = responseConsumer;
             return this;
         }
@@ -305,7 +309,7 @@ public final class HttpClient {
          * @return Builder instance
          */
         @NotNull public WrappedRequestBuilder onException(
-            @NotNull final Consumer<Throwable> consumer) {
+                @NotNull final Consumer<Throwable> consumer) {
             this.exceptionHandler = consumer;
             builder.onException(consumer);
             return this;
@@ -315,8 +319,8 @@ public final class HttpClient {
          * Perform the request
          *
          * @return The raw response, if no exception was thrown during the
-         *         handling of the response. If any exception was handled,
-         *         the method will return {@code null}
+         * handling of the response. If any exception was handled,
+         * the method will return {@code null}
          */
         @Nullable public HttpResponse execute() {
             for (final Consumer<WrappedRequestBuilder> decorator : settings.getRequestDecorators()) {
@@ -352,5 +356,6 @@ public final class HttpClient {
         }
 
     }
+
 
 }

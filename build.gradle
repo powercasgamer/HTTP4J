@@ -1,0 +1,87 @@
+plugins {
+    id("java")
+    id("java-library")
+    alias(libs.plugins.indra)
+    alias(libs.plugins.indra.publishing)
+    alias(libs.plugins.titan)
+}
+
+group("net.deltapvp")
+
+repositories {
+    mavenCentral()
+    maven {
+        url("https://repo.deltapvp.net/")
+    }
+    maven {
+        url("https://maven.reposilite.com/snapshots")
+    }
+    maven {
+        url("https://repository.apache.org/snapshots")
+    }
+    mavenLocal()
+}
+
+dependencies {
+    compileOnly(libs.annotations)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+    testImplementation("org.mock-server:mockserver-netty:5.11.2")
+    testImplementation("org.mock-server:mockserver-client-java:5.11.2")
+    testImplementation("ch.qos.logback:logback-classic:1.3.0-alpha4")
+    compileOnly(libs.gson)
+    testImplementation(libs.gson)
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+//javadoc {
+//    title = project.name + " " + project.version
+//    options.addStringOption("Xdoclint:none", "-quiet")
+//    options.tags(
+//            "apiNote:a:API Note:",
+//            "implSpec:a:Implementation Requirements:",
+//            "implNote:a:Implementation Note:"
+//    )
+//    options.links("https://javadoc.io/doc/org.jetbrains/annotations/23.0.0/")
+//    options.links("https://www.javadoc.io/doc/com.google.code.gson/gson/2.9.1/")
+//}
+
+indra {
+    javaVersions {
+        minimumToolchain(8)
+        target(8)
+        testWith(8, 11)
+    }
+    mitLicense()
+    github("powercasgamer", "HTTP4J") {
+        ci(true)
+        issues(true)
+    }
+
+    configurePublications {
+        pom {
+            developers {
+                developer {
+                    id = "powercas_gamer"
+                    timezone = "America/Chicago"
+                }
+                developer {
+                    id = "Citymonstret"
+                    name = "Alexander Söderberg"
+                }
+            }
+        }
+
+        versionMapping {
+            usage(Usage.JAVA_API) { fromResolutionOf(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) }
+            usage(Usage.JAVA_RUNTIME) { fromResolutionResult() }
+        }
+    }
+
+    publishReleasesTo("delta", "https://reposilite.deltapvp.net/releases/")
+    publishSnapshotsTo("delta", "https://reposilite.deltapvp.net/snapshots/")
+}
