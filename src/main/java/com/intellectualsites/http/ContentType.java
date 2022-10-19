@@ -1,7 +1,7 @@
 /*
  * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) {year} IntellectualSites
+ * Copyright (c) 2021 IntellectualSites
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
