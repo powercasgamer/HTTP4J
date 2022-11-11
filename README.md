@@ -25,8 +25,6 @@ size of the output artifacts.
 
 ### Repository
 
-Releases are published to the central repository, snapshots are published to S01 OSS Sonatype.
-
 ```kotlin
 repositories {
     mavenCentral()
@@ -34,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("net.deltapvp:http4j:1.5.1-SNAPSHOT")
+    compileOnly("net.deltapvp:http4j:1.5.2-SNAPSHOT")
 }
 ```
 
@@ -42,13 +40,13 @@ dependencies {
 <dependency>
     <groupId>net.deltapvp</groupId>
     <artifactId>http4j</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
 </dependency>
 ```
 
 ### Code
 
-**JavaDocs:** [https://reposilite.deltapvp.net/javadoc/snapshots/net/deltapvp/http4j/1.5.1-SNAPSHOT](https://reposilite.deltapvp.net/javadoc/snapshots/net/deltapvp/http4j/1.5.1-SNAPSHOT)
+**JavaDocs:** [https://reposilite.deltapvp.net/javadoc/snapshots/net/deltapvp/http4j/1.5.2-SNAPSHOT](https://reposilite.deltapvp.net/javadoc/snapshots/net/deltapvp/http4j/1.5.2-SNAPSHOT)
 
 All requests are done using an instance of `com.intellectualsites.http.HttpClient`:
 
