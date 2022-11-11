@@ -44,7 +44,7 @@ public final class GsonMapper {
      * @param <T>   Input type
      * @return Serializer for the input type
      */
-    @NotNull public static <T> GsonSerializer<T> serializer(@NotNull final Class<T> clazz,
+    public static @NotNull <T> GsonSerializer<T> serializer(@NotNull final Class<T> clazz,
                                                    @NotNull final Gson gson) {
         return new GsonSerializer<>(clazz, gson);
     }
@@ -57,7 +57,7 @@ public final class GsonMapper {
      * @param <T>   Output type
      * @return Deserializer for the output type
      */
-    @NotNull public static <T> GsonDeserializer<T> deserializer(@NotNull final Class<T> clazz,
+    public static @NotNull <T> GsonDeserializer<T> deserializer(@NotNull final Class<T> clazz,
                                                        @NotNull final Gson gson) {
         return new GsonDeserializer<>(clazz, gson);
     }
@@ -97,7 +97,7 @@ public final class GsonMapper {
         }
 
         @Override
-        @NotNull public T deserialize(@Nullable final ContentType contentType, final byte @NotNull [] input) {
+        public @NotNull T deserialize(@Nullable final ContentType contentType, final byte @NotNull [] input) {
             final Charset charset;
             if (contentType != null && contentType.toString().toLowerCase().contains("utf-8")) {
                 charset = StandardCharsets.UTF_8;
@@ -107,9 +107,7 @@ public final class GsonMapper {
             } else {
                 charset = StandardCharsets.US_ASCII;
             }
-            return gson.fromJson(new String(input, charset), this.clazz);
+            return this.gson.fromJson(new String(input, charset), this.clazz);
         }
-
     }
-
 }

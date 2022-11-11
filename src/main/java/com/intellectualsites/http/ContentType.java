@@ -54,7 +54,7 @@ public final class ContentType {
      * @param type MIME type
      * @return MIME type instance
      */
-    @NotNull public static ContentType of(@NotNull final String type) {
+    public static @NotNull ContentType of(@NotNull final String type) {
         return internalMap.computeIfAbsent(Objects.requireNonNull(type,
                 "Type may not be null").toLowerCase(), ContentType::new);
     }
@@ -74,11 +74,11 @@ public final class ContentType {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
         final ContentType mimeType = (ContentType) o;
-        return Objects.equals(type, mimeType.type);
+        return Objects.equals(this.type, mimeType.type);
     }
 
 }

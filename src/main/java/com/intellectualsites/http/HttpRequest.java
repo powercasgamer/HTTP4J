@@ -51,11 +51,11 @@ final class HttpRequest {
     @NotNull private final Headers headers;
     @NotNull private final EntityMapper mapper;
     @Nullable private final Supplier<Object> inputSupplier;
-    @NotNull private final Consumer<Throwable> throwableConsumer;
+    private final @NotNull Consumer<? super Throwable> throwableConsumer;
 
     private HttpRequest(@NotNull final HttpMethod method, @NotNull final URL url, @NotNull final Headers headers,
-                        @Nullable Supplier<Object> inputSupplier, @NotNull final EntityMapper mapper,
-                        @NotNull final Consumer<Throwable> throwableConsumer) {
+                        @Nullable final Supplier<Object> inputSupplier, @NotNull final EntityMapper mapper,
+                        final @NotNull Consumer<? super Throwable> throwableConsumer) {
         this.method = method;
         this.url = url;
         this.headers = headers;
@@ -155,7 +155,7 @@ final class HttpRequest {
 
             return builder.build();
         } catch (final Throwable throwable) {
-            throwableConsumer.accept(throwable);
+            this.throwableConsumer.accept(throwable);
         } finally {
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();

@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("net.deltapvp:http4j:1.5.0-SNAPSHOT")
+    compileOnly("net.deltapvp:http4j:1.5.1-SNAPSHOT")
 }
 ```
 
@@ -42,13 +42,13 @@ dependencies {
 <dependency>
     <groupId>net.deltapvp</groupId>
     <artifactId>http4j</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.5.1-SNAPSHOT</version>
 </dependency>
 ```
 
 ### Code
 
-**JavaDocs:** [https://javadoc.io/doc/net.deltapvp/http4j](https://javadoc.io/doc/net.deltapvp/http4j)
+**JavaDocs:** [https://reposilite.deltapvp.net/javadoc/snapshots/net/deltapvp/http4j/1.5.1-SNAPSHOT](https://reposilite.deltapvp.net/javadoc/snapshots/net/deltapvp/http4j/1.5.1-SNAPSHOT)
 
 All requests are done using an instance of `com.intellectualsites.http.HttpClient`:
 
