@@ -54,7 +54,7 @@ public final class HttpResponse {
      *
      * @return Builder instance
      */
-    @NotNull static Builder builder() {
+    static @NotNull Builder builder() {
         return new Builder();
     }
 
@@ -63,7 +63,7 @@ public final class HttpResponse {
      *
      * @return Status message
      */
-    @NotNull public String getStatus() {
+    public @NotNull String getStatus() {
         return this.status;
     }
 
@@ -90,7 +90,7 @@ public final class HttpResponse {
      *
      * @return Response headers
      */
-    @NotNull public Headers getHeaders() {
+    public @NotNull Headers getHeaders() {
         return this.headers;
     }
 
@@ -102,7 +102,7 @@ public final class HttpResponse {
      * @return Response
      * @throws IllegalArgumentException If no mapper exists for the type
      */
-    @NotNull public <T> T getResponseEntity(@NotNull final Class<T> returnType) {
+    public @NotNull <T> T getResponseEntity(@NotNull final Class<T> returnType) {
         final String contentTypeString = this.headers.getOrDefault("content-type", null);
         final ContentType contentType;
         if (contentTypeString != null) {

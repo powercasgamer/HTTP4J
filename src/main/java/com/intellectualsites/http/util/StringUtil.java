@@ -23,18 +23,24 @@
  */
 package com.intellectualsites.http.util;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author powercas_gamer
  * @since 1.5.0-SNAPSHOT
  */
 public class StringUtil {
 
-    public static boolean isEmpty(String string) {
-        if (string == null) return true;
-        String trimmed = string.trim();
-        if (trimmed.isEmpty()) return true;
-        else if (trimmed.equalsIgnoreCase("")) return true;
-        else if (trimmed.equalsIgnoreCase(" ")) return true;
-        else return trimmed.equalsIgnoreCase("null");
+    public static boolean isEmpty(@Nullable final String string) {
+        if (string == null || string.isEmpty()) {
+            return true;
+        }
+
+        for (final char c : string.toCharArray()) {
+            if (!Character.isWhitespace(c)) {
+                return true;
+            }
+        }
+        return true;
     }
 }

@@ -89,7 +89,7 @@ final class Headers {
      * @return Header value, or {@code ""}
      */
     @NotNull String getHeader(@NotNull final String key) {
-        return Objects.requireNonNull(getOrDefault(key, ""));
+        return Objects.requireNonNull(this.getOrDefault(key, ""));
     }
 
     /**

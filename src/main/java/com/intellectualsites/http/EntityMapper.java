@@ -50,7 +50,7 @@ public final class EntityMapper {
      *
      * @return Created instance
      */
-    @NotNull public static EntityMapper newInstance() {
+    public static @NotNull EntityMapper newInstance() {
         final EntityMapper mapper = new EntityMapper();
         mapper.registerDeserializer(String.class, new StringDeserializer());
         mapper.registerSerializer(String.class, new StringSerializer());
@@ -65,8 +65,8 @@ public final class EntityMapper {
      * @param <T>        Type to map
      * @return Mapper instance
      */
-    @NotNull public <T> EntityMapper registerSerializer(@NotNull final Class<T> clazz,
-                                               @NotNull final EntitySerializer<T> serializer) {
+    public @NotNull <T> EntityMapper registerSerializer(@NotNull final Class<T> clazz,
+                                                        @NotNull final EntitySerializer<T> serializer) {
         Objects.requireNonNull(clazz, "Class may not be null");
         Objects.requireNonNull(serializer, "Serializer may not be null");
         this.serializers.put(clazz, serializer);
@@ -81,7 +81,7 @@ public final class EntityMapper {
      * @param <T>          Type of the objects produces by the deserializer
      * @return Mapper instance
      */
-    @NotNull public <T> EntityMapper registerDeserializer(@NotNull final Class<T> clazz,
+    public @NotNull <T> EntityMapper registerDeserializer(@NotNull final Class<T> clazz,
                                                  @NotNull final EntityDeserializer<T> deserializer) {
         Objects.requireNonNull(clazz, "Type may not be null");
         Objects.requireNonNull(deserializer, "Deserializer may not be null");
@@ -145,7 +145,6 @@ public final class EntityMapper {
 
     }
 
-
     /**
      * Deserializer for HTTP response bodies
      *
@@ -166,11 +165,10 @@ public final class EntityMapper {
 
     }
 
-
     private static final class StringDeserializer implements EntityDeserializer<String> {
 
-        @NotNull @Override
-        public String deserialize(@Nullable final ContentType contentType,
+        @Override
+        public @NotNull String deserialize(@Nullable final ContentType contentType,
                                   final byte @NotNull [] input) {
             final Charset charset;
             if (contentType != null && contentType.toString().toLowerCase().contains("utf-8")) {
@@ -200,5 +198,4 @@ public final class EntityMapper {
         }
 
     }
-
 }

@@ -51,7 +51,7 @@ public final class HttpClient {
      *
      * @return Builder instance
      */
-    @NotNull public static Builder newBuilder() {
+    public static @NotNull Builder newBuilder() {
         return new Builder();
     }
 
@@ -61,7 +61,7 @@ public final class HttpClient {
      * @param url URL
      * @return Created builder
      */
-    @NotNull public WrappedRequestBuilder get(@NotNull final String url) {
+    public @NotNull WrappedRequestBuilder get(@NotNull final String url) {
         Objects.requireNonNull(url, "URL may not be null");
         return new WrappedRequestBuilder(HttpMethod.GET, url);
     }
@@ -72,7 +72,7 @@ public final class HttpClient {
      * @param url URL
      * @return Created builder
      */
-    @NotNull public WrappedRequestBuilder post(@NotNull final String url) {
+    public @NotNull WrappedRequestBuilder post(@NotNull final String url) {
         Objects.requireNonNull(url, "URL may not be null");
         return new WrappedRequestBuilder(HttpMethod.POST, url);
     }
@@ -83,7 +83,7 @@ public final class HttpClient {
      * @param url URL
      * @return Created builder
      */
-    @NotNull public WrappedRequestBuilder put(@NotNull final String url) {
+    public @NotNull WrappedRequestBuilder put(@NotNull final String url) {
         Objects.requireNonNull(url, "URL may not be null");
         return new WrappedRequestBuilder(HttpMethod.PUT, url);
     }
@@ -94,7 +94,7 @@ public final class HttpClient {
      * @param url URL
      * @return Created builder
      */
-    @NotNull public WrappedRequestBuilder head(@NotNull final String url) {
+    public @NotNull WrappedRequestBuilder head(@NotNull final String url) {
         Objects.requireNonNull(url, "URL may not be null");
         return new WrappedRequestBuilder(HttpMethod.HEAD, url);
     }
@@ -105,7 +105,7 @@ public final class HttpClient {
      * @param url URL
      * @return Created builder
      */
-    @NotNull public WrappedRequestBuilder delete(@NotNull final String url) {
+    public @NotNull WrappedRequestBuilder delete(@NotNull final String url) {
         Objects.requireNonNull(url, "URL may not be null");
         return new WrappedRequestBuilder(HttpMethod.DELETE, url);
     }
@@ -116,7 +116,7 @@ public final class HttpClient {
      * @param url URL
      * @return Created builder
      */
-    @NotNull public WrappedRequestBuilder patch(@NotNull final String url) {
+    public @NotNull WrappedRequestBuilder patch(@NotNull final String url) {
         Objects.requireNonNull(url, "URL may not be null");
         return new WrappedRequestBuilder(HttpMethod.PATCH, url);
     }
@@ -126,7 +126,7 @@ public final class HttpClient {
      *
      * @return Entity mapper
      */
-    @NotNull public EntityMapper getMapper() {
+    public @NotNull EntityMapper getMapper() {
         return this.mapper;
     }
 
@@ -150,9 +150,9 @@ public final class HttpClient {
          * @param baseURL Base URL. Cannot be null, but can be empty.
          * @return Builder instance
          */
-        @NotNull public Builder withBaseURL(@NotNull final String baseURL) {
+        public @NotNull Builder withBaseURL(@NotNull final String baseURL) {
             Objects.requireNonNull(baseURL, "Base URL may not be null");
-            if (baseURL.endsWith("/")) {
+            if (!baseURL.isEmpty() && baseURL.charAt(baseURL.length() - 1) == '/') {
                 this.settings.setBaseURL(baseURL.substring(0, baseURL.length() - 1));
             } else {
                 this.settings.setBaseURL(baseURL);
@@ -167,7 +167,7 @@ public final class HttpClient {
          * @param entityMapper Entity mapper
          * @return Builder instance
          */
-        @NotNull public Builder withEntityMapper(@Nullable final EntityMapper entityMapper) {
+        public @NotNull Builder withEntityMapper(@Nullable final EntityMapper entityMapper) {
             this.settings.setEntityMapper(entityMapper);
             return this;
         }
@@ -179,7 +179,7 @@ public final class HttpClient {
          * @param decorator Decorator
          * @return Builder instance
          */
-        @NotNull public Builder withDecorator(@NotNull final Consumer<WrappedRequestBuilder> decorator) {
+        public @NotNull Builder withDecorator(@NotNull final Consumer<WrappedRequestBuilder> decorator) {
             this.settings.addDecorator(Objects.requireNonNull(decorator, "Decorator may not be null"));
             return this;
         }
@@ -191,7 +191,7 @@ public final class HttpClient {
          * @return Created client
          */
         public HttpClient build() {
-            return new HttpClient(settings);
+            return new HttpClient(this.settings);
         }
 
     }
@@ -216,7 +216,7 @@ public final class HttpClient {
         private Consumer<Throwable> exceptionHandler = null;
 
         private WrappedRequestBuilder(@NotNull final HttpMethod method, @NotNull String url) {
-            if (url.startsWith("/")) {
+            if (!url.isEmpty() && url.charAt(0) == '/') {
                 if (url.length() == 1) {
                     url = "";
                 } else {
@@ -228,15 +228,15 @@ public final class HttpClient {
             }
             try {
                 final URL javaURL = new URL(url);
-                builder.withURL(javaURL);
-            } catch (MalformedURLException e) {
+                this.builder.withURL(javaURL);
+            } catch (final MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-            builder.withMethod(method);
+            this.builder.withMethod(method);
             /*if (HttpClient.this.mapper != null) {
                 builder.withMapper(HttpClient.this.mapper);
-            } else */if (settings.getEntityMapper() != null) {
-                builder.withMapper(settings.getEntityMapper());
+            } else */if (HttpClient.this.settings.getEntityMapper() != null) {
+                this.builder.withMapper(HttpClient.this.settings.getEntityMapper());
             }
         }
 
@@ -248,8 +248,8 @@ public final class HttpClient {
          * @param input Input
          * @return Builder instance
          */
-        @NotNull public WrappedRequestBuilder withInput(@NotNull final Supplier<Object> input) {
-            builder.withInput(input);
+        public @NotNull WrappedRequestBuilder withInput(@NotNull final Supplier<Object> input) {
+            this.builder.withInput(input);
             return this;
         }
 
@@ -259,8 +259,8 @@ public final class HttpClient {
          * @param mapper Entity mapper
          * @return Builder instance
          */
-        @NotNull public WrappedRequestBuilder withMapper(@NotNull final EntityMapper mapper) {
-            builder.withMapper(mapper);
+        public @NotNull WrappedRequestBuilder withMapper(@NotNull final EntityMapper mapper) {
+            this.builder.withMapper(mapper);
             return this;
         }
 
@@ -271,9 +271,9 @@ public final class HttpClient {
          * @param value Header value
          * @return Builder instance
          */
-        @NotNull public WrappedRequestBuilder withHeader(@NotNull final String key,
+        public @NotNull WrappedRequestBuilder withHeader(@NotNull final String key,
                                                 @NotNull final String value) {
-            builder.withHeader(key, value);
+            this.builder.withHeader(key, value);
             return this;
         }
 
@@ -284,9 +284,9 @@ public final class HttpClient {
          * @param responseConsumer Response consumer
          * @return Builder instance
          */
-        @NotNull public WrappedRequestBuilder onStatus(final int code,
+        public @NotNull WrappedRequestBuilder onStatus(final int code,
                                               @NotNull final Consumer<HttpResponse> responseConsumer) {
-            consumers.put(code, responseConsumer);
+            this.consumers.put(code, responseConsumer);
             return this;
         }
 
@@ -296,7 +296,7 @@ public final class HttpClient {
          * @param responseConsumer Response consumer
          * @return Builder instance
          */
-        @NotNull public WrappedRequestBuilder onRemaining(
+        public @NotNull WrappedRequestBuilder onRemaining(
                 @NotNull final Consumer<HttpResponse> responseConsumer) {
             this.other = responseConsumer;
             return this;
@@ -308,10 +308,10 @@ public final class HttpClient {
          * @param consumer Exception consumer
          * @return Builder instance
          */
-        @NotNull public WrappedRequestBuilder onException(
+        public @NotNull WrappedRequestBuilder onException(
                 @NotNull final Consumer<Throwable> consumer) {
             this.exceptionHandler = consumer;
-            builder.onException(consumer);
+            this.builder.onException(consumer);
             return this;
         }
 
@@ -322,14 +322,14 @@ public final class HttpClient {
          * handling of the response. If any exception was handled,
          * the method will return {@code null}
          */
-        @Nullable public HttpResponse execute() {
-            for (final Consumer<WrappedRequestBuilder> decorator : settings.getRequestDecorators()) {
+        public @Nullable HttpResponse execute() {
+            for (final Consumer<WrappedRequestBuilder> decorator : HttpClient.this.settings.getRequestDecorators()) {
                 decorator.accept(this);
             }
             try {
                 final Throwable[] throwables = new Throwable[1];
                 if (this.exceptionHandler == null) {
-                    builder.onException(e -> throwables[0] = e);
+                    this.builder.onException(e -> throwables[0] = e);
                 }
                 final HttpResponse response = this.builder.build().executeRequest();
                 if (response != null) {
@@ -354,8 +354,5 @@ public final class HttpClient {
             }
             return null;
         }
-
     }
-
-
 }
