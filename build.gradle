@@ -1,6 +1,4 @@
 plugins {
-    id("java")
-    id("java-library")
     alias(libs.plugins.indra)
     alias(libs.plugins.indra.publishing)
     alias(libs.plugins.titan)
