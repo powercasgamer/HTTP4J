@@ -9,7 +9,7 @@ on:
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
   cancel-in-progress: true
-  
+
 jobs:
   build:
     # Only run on PRs if the source branch is on someone else's repo
@@ -22,6 +22,9 @@ jobs:
     steps:
       - name: "checkout repository"
         uses: actions/checkout@v3
+      - name: Make wrapper executable
+        run: |
+          chmod +x gradlew
 
       - name: "validate gradle wrapper"
         uses: "gradle/wrapper-validation-action@v1"
@@ -39,8 +42,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ~/.gradle/notifications
             ~/.gradle/jdks
-          key: "${{ runner.os }}-deltapvp-${{ hashFiles('**/*.gradle*') }}"
+            .gradle/loom-cache
+            .gradle/caches/VanillaGradle
+            ~/.konan
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/libs.versions.*', '**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-deltapvp-
 
@@ -48,11 +55,16 @@ jobs:
         uses: "gradle/gradle-build-action@v2"
         with:
           cache-read-only: "${{ !startsWith(github.ref, 'refs/heads/master/') || github.event_name == 'pull_request' }}"
-          arguments: "build"
+          arguments: "build --stacktrace"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: "**/build/libs/*.jar"
 
       - name: Cleanup Gradle Cache
-      # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
-      # Restoring these files from a GitHub Actions cache might cause problems for future builds.
+        # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
+        # Restoring these files from a GitHub Actions cache might cause problems for future builds.
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties

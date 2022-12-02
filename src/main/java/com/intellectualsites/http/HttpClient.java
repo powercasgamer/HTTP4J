@@ -1,7 +1,8 @@
 /*
  * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) 2021-2022 IntellectualSites
+ * Copyright (c) 2021-2022 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -195,7 +196,6 @@ public final class HttpClient {
         }
 
     }
-
 
     /**
      * Wrapper used to interact with HTTP requests.

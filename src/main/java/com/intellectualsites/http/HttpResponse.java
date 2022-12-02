@@ -1,7 +1,8 @@
 /*
  * This file is part of HTTP4J, licensed under the MIT License.
  *
- * Copyright (c) 2021 IntellectualSites
+ * Copyright (c) 2021-2022 IntellectualSites
+ * Copyright (c) 2021-2022 contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -117,7 +118,6 @@ public final class HttpResponse {
                         returnType.getCanonicalName())));
     }
 
-
     static class Builder {
 
         private final Headers headers = Headers.newInstance();
@@ -159,7 +159,5 @@ public final class HttpResponse {
             return new HttpResponse(this.status, this.statusMessage,
                     this.headers, this.entityMapper, this.bytes);
         }
-
     }
-
 }

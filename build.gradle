@@ -24,14 +24,13 @@ dependencies {
     testImplementation(libs.gson)
 }
 
-
 test {
     useJUnitPlatform()
 }
 
 indra {
     javaVersions {
-        minimumToolchain(8)
+        minimumToolchain(17)
         target(8)
         testWith(8, 11)
     }
@@ -54,11 +53,6 @@ indra {
                     name = "Alexander Söderberg"
                 }
             }
-        }
-
-        versionMapping {
-            usage(Usage.JAVA_API) { fromResolutionOf(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) }
-            usage(Usage.JAVA_RUNTIME) { fromResolutionResult() }
         }
     }
 

@@ -1,8 +1,8 @@
 [versions]
-indra = "3.0.1"
+indra = "3.1.0-SNAPSHOT"
 annotations = "23.0.0"
 gson = "2.10"
-titan = "1.0.88-SNAPSHOT"
+titan = "1.0.91-SNAPSHOT"
 
 [libraries]
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
