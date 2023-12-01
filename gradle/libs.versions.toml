@@ -1,7 +1,7 @@
 [versions]
 indra = "3.1.0-SNAPSHOT"
 annotations = "23.0.0"
-gson = "2.10"
+gson = "2.10.1"
 titan = "1.0.91-SNAPSHOT"
 
 [libraries]
